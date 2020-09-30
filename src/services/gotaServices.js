@@ -1,7 +1,6 @@
 export default class GotService {
-    constuctor() {
-        this._apiBase = 'https://www.anapioficeandfire.com/api';
-    }
+
+    static _apiBase = 'https://www.anapioficeandfire.com/api';
 
     static async getResource(url) {
         const res = await fetch(`${this._apiBase}${url}`);
@@ -9,27 +8,63 @@ export default class GotService {
         return await res.json();
     }
 
-    static getAllCharacters(page = 5) {
-        return this.getResource(`/characters/?page=${page}&pageSize=10`);
+    static async getAllCharacters(page = 5) {
+        const res = await this.getResource(`/characters/?page=${page}&pageSize=10`);
+        return res.map(this._transformCharacter);
     }
 
-    static getCharacter(id) {
-        return this.getResource(`/characters/${id}`);
+    static async getCharacter(id) {
+        const res = await this.getResource(`/characters/${id}`);
+        return this._transformCharacter(res);
     }
 
-    static getAllHouses(page = 5) {
-        return this.getResource(`/houses/?page=${page}`);
+    static async getAllHouses(page = 5) {
+        const res = await this.getResource(`/houses/?page=${page}`);
+        return res.map(this._transformHouse); 
     }
 
-    static getHouse(id) {
-        return this.getResource(`/houses/${id}`);
+    static async getHouse(id) {
+        const res = await this.getResource(`/houses/${id}`);
+        return this._transformHouse(res);
     }
 
-    static getAllBooks(page = 5) {
-        return this.getResource(`/books/?page=${page}`);
+    static async getAllBooks(page = 5) {
+        const res = await this.getResource(`/books/?page=${page}`);
+        return res.map(this._transformBook);                               
     }
 
-    static getBoook(id) {
-        return this.getResource(`/books/${id}`);
+    static async getBoook(id) {
+        const res = await this.getResource(`/books/${id}`);
+        return this._transformBook(res);
+    }
+
+    static _transformCharacter(char) {
+        return {
+            name: char.name,
+            gender: char.gender,
+            born: char.born,
+            died: char.died,
+            culture: char.culture
+        }
+    }
+
+    static _transformBook(book) {
+        return {
+            name: book.name,
+            numberOfPages: book.numberOfPages,
+            released: book.released,
+            publiser: book.publiser
+        }
+    }
+
+    static _transformHouse(house) {
+        return {
+            name: house.name,
+            region: house.region,
+            words: house.words,
+            titles: house.titles,
+            overlord: house.overlord,
+            ancestralWeapons: house.ancestralWeapons
+        }
     }
 }

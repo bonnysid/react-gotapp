@@ -1,0 +1,9 @@
+.random-block img {
+    width: 100%;
+}
+
+.img__block {
+    display: inline-block;
+    width: 25px;
+    margin-right: 10px;
+}
